@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Test AI-900 - Parte 4</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; background-color: #f2f2f2; }
+    .question { background: white; padding: 15px; margin-bottom: 20px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+    .question h3 { margin-top: 0; }
+    .option { margin: 5px 0; padding: 10px; border-radius: 5px; background-color: #e0e0e0; cursor: pointer; }
+    .option:hover { background-color: #d5d5d5; }
+    .option.correct { background-color: #a5d6a7; }
+    .option.incorrect { background-color: #ef9a9a; }
+    .explanation { display: none; margin-top: 10px; padding: 10px; background: #dfe6e9; border-left: 4px solid #636e72; }
+    .nav { margin-bottom: 20px; }
+    .nav a { margin-right: 10px; text-decoration: none; color: #2d3436; font-weight: bold; }
+    .translate-btn {
+      display: inline-block;
+      margin: 5px;
+      padding: 10px 20px;
+      background-color: #6c5ce7;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="nav">
+    <a href="test_ai900_parte1.html">Parte 1</a>
+    <a href="test_ai900_parte2.html">Parte 2</a>
+    <a href="test_ai900_parte3.html">Parte 3</a>
+    <a href="test_ai900_parte4.html">Parte 4</a>
+  </div>
+  <h1>Test interactivo AI-900 - Parte 4</h1>
+  <div>
+    <button class="translate-btn" id="btn-es">Español</button>
+    <button class="translate-btn" id="btn-en">English</button>
+    <div id="google_translate_element" style="display:none;"></div>
+  </div>
+  <div id="questions-container"></div>
+  <script>
+    const questions = [
+      {
+        question: "Pregunta 76: ¿Qué significa el concepto número 76 en Inteligencia Artificial?",
+        options: {
+          A: "Opción A del concepto 76",
+          B: "Opción B del concepto 76",
+          C: "Opción C del concepto 76",
+          D: "Opción D del concepto 76"
+        },
+        correct: "A",
+        explanation: "Esta es la explicación clara del concepto número 76."
+      },
+      {
+        question: "Pregunta 77: ¿Qué significa el concepto número 77 en Inteligencia Artificial?",
+        options: {
+          A: "Opción A del concepto 77",
+          B: "Opción B del concepto 77",
+          C: "Opción C del concepto 77",
+          D: "Opción D del concepto 77"
+        },
+        correct: "A",
+        explanation: "Esta es la explicación clara del concepto número 77."
+      },
+      {
+        question: "Pregunta 78: ¿Qué significa el concepto número 78 en Inteligencia Artificial?",
+        options: {
+          A: "Opción A del concepto 78",
+          B: "Opción B del concepto 78",
+          C: "Opción C del concepto 78",
+          D: "Opción D del concepto 78"
+        },
+        correct: "A",
+        explanation: "Esta es la explicación clara del concepto número 78."
+      },
+      {
+        question: "Pregunta 79: ¿Qué significa el concepto número 79 en Inteligencia Artificial?",
+        options: {
+          A: "Opción A del concepto 79",
+          B: "Opción B del concepto 79",
+          C: "Opción C del concepto 79",
+          D: "Opción D del concepto 79"
+        },
+        correct: "A",
+        explanation: "Esta es la explicación clara del concepto número 79."
+      },
+      {
+        question: "Pregunta 80: ¿Qué significa el concepto número 80 en Inteligencia Artificial?",
+        options: {
+          A: "Opción A del concepto 80",
+          B: "Opción B del concepto 80",
+          C: "Opción C del concepto 80",
+          D: "Opción D del concepto 80"
+        },
+        correct: "A",
+        explanation: "Esta es la explicación clara del concepto número 80."
+      },
+      {
+        question: "Pregunta 81: ¿Qué significa el concepto número 81 en Inteligencia Artificial?",
+        options: {
+          A: "Opción A del concepto 81",
+          B: "Opción B del concepto 81",
+          C: "Opción C del concepto 81",
+          D: "Opción D del concepto 81"
+        },
+        correct: "A",
+        explanation: "Esta es la explicación clara del concepto número 81."
+      },
+      {
+        question: "Pregunta 82: ¿Qué significa el concepto número 82 en Inteligencia Artificial?",
+        options: {
+          A: "Opción A del concepto 82",
+          B: "Opción B del concepto 82",
+          C: "Opción C del concepto 82",
+          D: "Opción D del concepto 82"
+        },
+        correct: "A",
+        explanation: "Esta es la explicación clara del concepto número 82."
+      },
+      {
+        question: "Pregunta 83: ¿Qué significa el concepto número 83 en Inteligencia Artificial?",
+        options: {
+          A: "Opción A del concepto 83",
+          B: "Opción B del concepto 83",
+          C: "Opción C del concepto 83",
+          D: "Opción D del concepto 83"
+        },
+        correct: "A",
+        explanation: "Esta es la explicación clara del concepto número 83."
+      },
+      {
+        question: "Pregunta 84: ¿Qué significa el concepto número 84 en Inteligencia Artificial?",
+        options: {
+          A: "Opción A del concepto 84",
+          B: "Opción B del concepto 84",
+          C: "Opción C del concepto 84",
+          D: "Opción D del concepto 84"
+        },
+        correct: "A",
+        explanation: "Esta es la explicación clara del concepto número 84."
+      },
+      {
+        question: "Pregunta 85: ¿Qué significa el concepto número 85 en Inteligencia Artificial?",
+        options: {
+          A: "Opción A del concepto 85",
+          B: "Opción B del concepto 85",
+          C: "Opción C del concepto 85",
+          D: "Opción D del concepto 85"
+        },
+        correct: "A",
+        explanation: "Esta es la explicación clara del concepto número 85."
+      },
+      {
+        question: "Pregunta 86: ¿Qué significa el concepto número 86 en Inteligencia Artificial?",
+        options: {
+          A: "Opción A del concepto 86",
+          B: "Opción B del concepto 86",
+          C: "Opción C del concepto 86",
+          D: "Opción D del concepto 86"
+        },
+        correct: "A",
+        explanation: "Esta es la explicación clara del concepto número 86."
+      },
+      {
+        question: "Pregunta 87: ¿Qué significa el concepto número 87 en Inteligencia Artificial?",
+        options: {
+          A: "Opción A del concepto 87",
+          B: "Opción B del concepto 87",
+          C: "Opción C del concepto 87",
+          D: "Opción D del concepto 87"
+        },
+        correct: "A",
+        explanation: "Esta es la explicación clara del concepto número 87."
+      },
+      {
+        question: "Pregunta 88: ¿Qué significa el concepto número 88 en Inteligencia Artificial?",
+        options: {
+          A: "Opción A del concepto 88",
+          B: "Opción B del concepto 88",
+          C: "Opción C del concepto 88",
+          D: "Opción D del concepto 88"
+        },
+        correct: "A",
+        explanation: "Esta es la explicación clara del concepto número 88."
+      },
+      {
+        question: "Pregunta 89: ¿Qué significa el concepto número 89 en Inteligencia Artificial?",
+        options: {
+          A: "Opción A del concepto 89",
+          B: "Opción B del concepto 89",
+          C: "Opción C del concepto 89",
+          D: "Opción D del concepto 89"
+        },
+        correct: "A",
+        explanation: "Esta es la explicación clara del concepto número 89."
+      },
+      {
+        question: "Pregunta 90: ¿Qué significa el concepto número 90 en Inteligencia Artificial?",
+        options: {
+          A: "Opción A del concepto 90",
+          B: "Opción B del concepto 90",
+          C: "Opción C del concepto 90",
+          D: "Opción D del concepto 90"
+        },
+        correct: "A",
+        explanation: "Esta es la explicación clara del concepto número 90."
+      },
+      {
+        question: "Pregunta 91: ¿Qué significa el concepto número 91 en Inteligencia Artificial?",
+        options: {
+          A: "Opción A del concepto 91",
+          B: "Opción B del concepto 91",
+          C: "Opción C del concepto 91",
+          D: "Opción D del concepto 91"
+        },
+        correct: "A",
+        explanation: "Esta es la explicación clara del concepto número 91."
+      },
+      {
+        question: "Pregunta 92: ¿Qué significa el concepto número 92 en Inteligencia Artificial?",
+        options: {
+          A: "Opción A del concepto 92",
+          B: "Opción B del concepto 92",
+          C: "Opción C del concepto 92",
+          D: "Opción D del concepto 92"
+        },
+        correct: "A",
+        explanation: "Esta es la explicación clara del concepto número 92."
+      },
+      {
+        question: "Pregunta 93: ¿Qué significa el concepto número 93 en Inteligencia Artificial?",
+        options: {
+          A: "Opción A del concepto 93",
+          B: "Opción B del concepto 93",
+          C: "Opción C del concepto 93",
+          D: "Opción D del concepto 93"
+        },
+        correct: "A",
+        explanation: "Esta es la explicación clara del concepto número 93."
+      },
+      {
+        question: "Pregunta 94: ¿Qué significa el concepto número 94 en Inteligencia Artificial?",
+        options: {
+          A: "Opción A del concepto 94",
+          B: "Opción B del concepto 94",
+          C: "Opción C del concepto 94",
+          D: "Opción D del concepto 94"
+        },
+        correct: "A",
+        explanation: "Esta es la explicación clara del concepto número 94."
+      },
+      {
+        question: "Pregunta 95: ¿Qué significa el concepto número 95 en Inteligencia Artificial?",
+        options: {
+          A: "Opción A del concepto 95",
+          B: "Opción B del concepto 95",
+          C: "Opción C del concepto 95",
+          D: "Opción D del concepto 95"
+        },
+        correct: "A",
+        explanation: "Esta es la explicación clara del concepto número 95."
+      },
+      {
+        question: "Pregunta 96: ¿Qué significa el concepto número 96 en Inteligencia Artificial?",
+        options: {
+          A: "Opción A del concepto 96",
+          B: "Opción B del concepto 96",
+          C: "Opción C del concepto 96",
+          D: "Opción D del concepto 96"
+        },
+        correct: "A",
+        explanation: "Esta es la explicación clara del concepto número 96."
+      },
+      {
+        question: "Pregunta 97: ¿Qué significa el concepto número 97 en Inteligencia Artificial?",
+        options: {
+          A: "Opción A del concepto 97",
+          B: "Opción B del concepto 97",
+          C: "Opción C del concepto 97",
+          D: "Opción D del concepto 97"
+        },
+        correct: "A",
+        explanation: "Esta es la explicación clara del concepto número 97."
+      },
+      {
+        question: "Pregunta 98: ¿Qué significa el concepto número 98 en Inteligencia Artificial?",
+        options: {
+          A: "Opción A del concepto 98",
+          B: "Opción B del concepto 98",
+          C: "Opción C del concepto 98",
+          D: "Opción D del concepto 98"
+        },
+        correct: "A",
+        explanation: "Esta es la explicación clara del concepto número 98."
+      },
+      {
+        question: "Pregunta 99: ¿Qué significa el concepto número 99 en Inteligencia Artificial?",
+        options: {
+          A: "Opción A del concepto 99",
+          B: "Opción B del concepto 99",
+          C: "Opción C del concepto 99",
+          D: "Opción D del concepto 99"
+        },
+        correct: "A",
+        explanation: "Esta es la explicación clara del concepto número 99."
+      },
+      {
+        question: "Pregunta 100: ¿Qué significa el concepto número 100 en Inteligencia Artificial?",
+        options: {
+          A: "Opción A del concepto 100",
+          B: "Opción B del concepto 100",
+          C: "Opción C del concepto 100",
+          D: "Opción D del concepto 100"
+        },
+        correct: "A",
+        explanation: "Esta es la explicación clara del concepto número 100."
+      },
+
+    ];
+
+    const container = document.getElementById('questions-container');
+
+    questions.forEach((q, index) => {
+      const div = document.createElement('div');
+      div.className = 'question';
+      div.setAttribute('data-correct', q.correct);
+      const title = document.createElement('h3');
+      title.textContent = `${index + 1}. ${q.question}`;
+      div.appendChild(title);
+      for (let key in q.options) {
+        const opt = document.createElement('div');
+        opt.className = 'option';
+        opt.setAttribute('data-option', key);
+        opt.textContent = `${key}. ${q.options[key]}`;
+        div.appendChild(opt);
+      }
+      const explanation = document.createElement('div');
+      explanation.className = 'explanation';
+      explanation.innerHTML = `<strong>Explicación:</strong> ${q.explanation}`;
+      div.appendChild(explanation);
+      container.appendChild(div);
+    });
+
+    document.addEventListener('click', function(e) {
+      if (e.target.classList.contains('option')) {
+        const option = e.target;
+        const question = option.closest('.question');
+        const correct = question.getAttribute('data-correct');
+        const explanation = question.querySelector('.explanation');
+        if (option.classList.contains('correct') || option.classList.contains('incorrect')) return;
+        const selected = option.getAttribute('data-option');
+        if (selected === correct) {
+          option.classList.add('correct');
+        } else {
+          option.classList.add('incorrect');
+          question.querySelector(`.option[data-option="${correct}"]`).classList.add('correct');
+        }
+        explanation.style.display = 'block';
+      }
+    });
+  </script>
+  <script type="text/javascript">
+    function googleTranslateElementInit() {
+      new google.translate.TranslateElement({pageLanguage: 'es', includedLanguages: 'en,es'}, 'google_translate_element');
+    }
+    function setLanguage(lang) {
+      var combo = document.querySelector('select.goog-te-combo');
+      if (combo) {
+        combo.value = lang;
+        combo.dispatchEvent(new Event('change'));
+      }
+    }
+    document.getElementById('btn-en').addEventListener('click', function(){setLanguage('en');});
+    document.getElementById('btn-es').addEventListener('click', function(){setLanguage('es');});
+  </script>
+  <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+</body>
+</html>

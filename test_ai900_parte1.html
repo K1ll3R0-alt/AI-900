@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Test AI-900 - Parte 1</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; background-color: #f2f2f2; }
+    .question { background: white; padding: 15px; margin-bottom: 20px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+    .question h3 { margin-top: 0; }
+    .option { margin: 5px 0; padding: 10px; border-radius: 5px; background-color: #e0e0e0; cursor: pointer; }
+    .option:hover { background-color: #d5d5d5; }
+    .option.correct { background-color: #a5d6a7; }
+    .option.incorrect { background-color: #ef9a9a; }
+    .explanation { display: none; margin-top: 10px; padding: 10px; background: #dfe6e9; border-left: 4px solid #636e72; }
+    .nav { margin-bottom: 20px; }
+    .nav a { margin-right: 10px; text-decoration: none; color: #2d3436; font-weight: bold; }
+    .translate-btn {
+      display: inline-block;
+      margin: 5px;
+      padding: 10px 20px;
+      background-color: #6c5ce7;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="nav">
+    <a href="test_ai900_parte1.html">Parte 1</a>
+    <a href="test_ai900_parte2.html">Parte 2</a>
+    <a href="test_ai900_parte3.html">Parte 3</a>
+    <a href="test_ai900_parte4.html">Parte 4</a>
+  </div>
+  <h1>Test interactivo AI-900 - Parte 1</h1>
+  <div>
+    <button class="translate-btn" id="btn-es">Español</button>
+    <button class="translate-btn" id="btn-en">English</button>
+    <div id="google_translate_element" style="display:none;"></div>
+  </div>
+  <div id="questions-container"></div>
+  <script>
+    const questions = [
+      {
+        question: "Pregunta 1: ¿Qué es la Inteligencia Artificial (IA)?",
+        options: {
+          A: "Un campo de la informática que busca crear sistemas capaces de realizar tareas que normalmente requieren inteligencia humana (como aprender o razonar).",
+          B: "Un tipo de hardware avanzado para acelerar cálculos matemáticos.",
+          C: "Un lenguaje de programación especializado en lógica.",
+          D: "Una base de datos de gran tamaño con información de muchas fuentes."
+        },
+        correct: "A",
+        explanation: "La IA es la disciplina que permite a las máquinas imitar la inteligencia y comportamiento humanos, realizando tareas como reconocimiento de voz, toma de decisiones o resolución de problemas."
+      },
+      {
+        question: "Pregunta 2: ¿Cómo se relacionan la inteligencia artificial, el aprendizaje automático (ML) y el aprendizaje profundo (DL)?",
+        options: {
+          A: "Machine Learning (ML) es un subconjunto de Deep Learning (DL), que a su vez es un subconjunto de IA.",
+          B: "Deep Learning es un subconjunto de ML, y ML es un subconjunto de IA.",
+          C: "IA es un tipo específico de ML enfocado solo en redes neuronales.",
+          D: "DL y ML son conceptos totalmente independientes de la IA."
+        },
+        correct: "B",
+        explanation: "La IA abarca diversas técnicas; dentro de ella está el aprendizaje automático (ML) como subconjunto, y dentro de ML está el aprendizaje profundo (DL) como subcampo especializado."
+      },
+      {
+        question: "Pregunta 3: ¿Cuál de los siguientes NO es un campo o rama del ámbito de la IA?",
+        options: {
+          A: "Visión por computadora (Computer Vision).",
+          B: "Procesamiento de lenguaje natural (NLP).",
+          C: "Aprendizaje automático (Machine Learning).",
+          D: "Álgebra lineal."
+        },
+        correct: "D",
+        explanation: "La IA abarca campos como visión por computadora, procesamiento de lenguaje natural y aprendizaje automático. El álgebra lineal es una rama de las matemáticas, no de la IA (aunque es utilizada en IA)."
+      },
+      {
+        question: "Pregunta 4: ¿Qué son los Servicios Cognitivos de Azure?",
+        options: {
+          A: "Un conjunto de servicios en la nube con APIs de IA pre-entrenadas que permiten agregar funcionalidades inteligentes (visión, habla, lenguaje, etc.) a las aplicaciones.",
+          B: "Un nuevo lenguaje de programación para desarrollar algoritmos de IA desde cero.",
+          C: "Una plataforma de hardware especializado únicamente para ejecutar modelos de IA.",
+          D: "Un editor gráfico para crear redes neuronales manualmente sin código."
+        },
+        correct: "A",
+        explanation: "Azure Cognitive Services es un conjunto de APIs y herramientas en la nube que ofrecen modelos de IA pre-entrenados para visión, lenguaje, voz, búsqueda y decisiones."
+      },
+      {
+        question: "Pregunta 5: Verdadero o falso: Los Servicios Cognitivos de Azure permiten usar modelos de IA pre-entrenados sin necesidad de entrenarlos ni ajustar sus parámetros manualmente.",
+        options: {
+          A: "Verdadero.",
+          B: "Falso."
+        },
+        correct: "A",
+        explanation: "Una ventaja clave de Azure Cognitive Services es que Microsoft ya entrenó modelos de IA y los expone mediante APIs. El desarrollador puede simplemente llamar a esas APIs con sus datos y obtener resultados de IA."
+      },
+      {
+        question: "Pregunta 6: ¿Cuál de las siguientes NO es una categoría de los Servicios Cognitivos de Azure?",
+        options: {
+          A: "Visión (Vision).",
+          B: "Voz (Speech).",
+          C: "Lenguaje (Language).",
+          D: "Computación cuántica."
+        },
+        correct: "D",
+        explanation: "Computación cuántica no es una categoría de Azure Cognitive Services. Las principales son Visión, Voz, Lenguaje, Decisión y Búsqueda."
+      },
+      {
+        question: "Pregunta 7: ¿Cuál de los siguientes servicios pertenece a la categoría de Visión en Azure Cognitive Services?",
+        options: {
+          A: "Azure Face – Servicio de detección y análisis facial.",
+          B: "Azure Translator – Servicio de traducción de texto.",
+          C: "Azure Speech to Text – Servicio de reconocimiento de voz.",
+          D: "Azure QnA Maker – Servicio de preguntas y respuestas."
+        },
+        correct: "A",
+        explanation: "La categoría de Visión incluye servicios relacionados con imágenes y videos, como Azure AI Vision (análisis de imágenes) y Azure Face (detección y análisis de rostros en imágenes)."
+      },
+      {
+        question: "Pregunta 8: ¿Cuál de los siguientes es un ejemplo de tarea de la categoría de Lenguaje (Procesamiento de Lenguaje Natural) en IA?",
+        options: {
+          A: "Analizar reseñas de clientes para determinar si el sentimiento es positivo o negativo.",
+          B: "Identificar objetos como perros o gatos en una fotografía.",
+          C: "Convertir un texto de inglés a español palabra por palabra sin entender contexto.",
+          D: "Transcribir automáticamente un mensaje de voz a texto."
+        },
+        correct: "A",
+        explanation: "Las tareas de Procesamiento de Lenguaje Natural (NLP) se refieren a analizar o generar lenguaje humano en texto. Un ejemplo típico es el análisis de sentimiento de opiniones o reseñas."
+      },
+      {
+        question: "Pregunta 9: ¿Cuál de estos escenarios corresponde a un servicio de Voz (Speech) de Azure?",
+        options: {
+          A: "Convertir una grabación de audio de una reunión en texto escrito.",
+          B: "Traducir automáticamente un documento escrito del español al inglés.",
+          C: "Detectar caras en fotografías de empleados para control de acceso.",
+          D: "Agrupar clientes en segmentos según sus compras."
+        },
+        correct: "A",
+        explanation: "Los servicios de Voz se enfocan en el reconocimiento y la síntesis de voz. Un ejemplo es convertir audio hablado en texto (Speech to Text), como transcribir la grabación de una reunión."
+      },
+      {
+        question: "Pregunta 10: ¿Cuál de los siguientes escenarios correspondería a la categoría Decisión en Azure Cognitive Services?",
+        options: {
+          A: "Recomendar automáticamente productos a un usuario en función de su historial de navegación (personalización).",
+          B: "Transcribir llamadas telefónicas a texto para archivado.",
+          C: "Clasificar automáticamente imágenes de animales en especies.",
+          D: "Traducir en tiempo real un chat de inglés a español."
+        },
+        correct: "A",
+        explanation: "La categoría Decisión incluye servicios que ayudan a tomar decisiones inteligentes, como Azure Personalizer, que mediante aprendizaje por refuerzo recomienda contenidos personalizados a cada usuario."
+      },
+      {
+        question: "Pregunta 11: Un sistema de IA para selección de personal funciona peor con candidatos de cierto grupo demográfico que con otros. ¿Qué principio de IA Responsable está principalmente involucrado en este problema?",
+        options: {
+          A: "Equidad (Fairness).",
+          B: "Transparencia.",
+          C: "Fiabilidad y seguridad.",
+          D: "Privacidad y seguridad."
+        },
+        correct: "A",
+        explanation: "Equidad significa que los sistemas de IA no deben discriminar ni tratar injustamente a personas o grupos por atributos como género, raza, etc."
+      },
+      {
+        question: "Pregunta 12: Un equipo de desarrollo se asegura de que su asistente de IA sea usable por personas con distintas capacidades (por ejemplo, ofreciendo respuestas en audio y texto para usuarios con dificultades auditivas o visuales). ¿Qué principio de IA Responsable ejemplifica esto?",
+        options: {
+          A: "Inclusión (Inclusiveness).",
+          B: "Rendimiento.",
+          C: "Privacidad.",
+          D: "Equidad."
+        },
+        correct: "A",
+        explanation: "El principio de Inclusión establece que los sistemas de IA deben empoderar a todas las personas y ser accesibles sin importar sus condiciones o capacidades."
+      },
+      {
+        question: "Pregunta 13: ¿Qué principio de IA Responsable se relaciona con proveer explicaciones y visibilidad sobre cómo funciona un sistema de IA?",
+        options: {
+          A: "Transparencia.",
+          B: "Equidad.",
+          C: "Productividad.",
+          D: "Creatividad."
+        },
+        correct: "A",
+        explanation: "El principio de Transparencia implica que los sistemas de IA deben ser entendibles y explicables para las personas."
+      },
+      {
+        question: "Pregunta 14: ¿Qué principio de IA Responsable enfatiza que siempre debe haber responsabilidad humana sobre las decisiones de un sistema de IA, incluyendo la posibilidad de supervisión y control humano?",
+        options: {
+          A: "Responsabilidad (Accountability).",
+          B: "Equidad.",
+          C: "Automatización.",
+          D: "Transparencia."
+        },
+        correct: "A",
+        explanation: "El principio de Accountability (Responsabilidad) establece que los humanos deben ser responsables y capaces de intervenir o controlar los sistemas de IA."
+      },
+      {
+        question: "Pregunta 15: Una empresa somete sus modelos de IA a pruebas extensivas y monitoreo continuo para asegurarse de que funcionen correctamente incluso ante situaciones imprevistas, y para prevenir usos malintencionados. ¿Qué principio de IA Responsable refleja esta práctica?",
+        options: {
+          A: "Fiabilidad y seguridad (Reliability and Safety).",
+          B: "Equidad.",
+          C: "Inclusión.",
+          D: "Transparencia."
+        },
+        correct: "A",
+        explanation: "El principio de Fiabilidad y seguridad busca garantizar que los sistemas de IA funcionen de manera consistente con su propósito y de forma segura, incluso en circunstancias inesperadas."
+      },
+      {
+        question: "Pregunta 16: Un asistente virtual de IA solicita permiso antes de usar datos personales y enmascara la información sensible de los usuarios en sus respuestas. ¿Qué principio de IA Responsable está atendiendo principalmente?",
+        options: {
+          A: "Privacidad y seguridad.",
+          B: "Equidad.",
+          C: "Transparencia.",
+          D: "Creatividad."
+        },
+        correct: "A",
+        explanation: "El principio de Privacidad y seguridad estipula que los sistemas de IA deben proteger los datos personales y la privacidad de los usuarios, además de mantener la seguridad de la información."
+      },
+
+      {
+        question: "Pregunta 17: ¿Cuál de estos es un ejemplo de un problema de clasificación supervisada?",
+        options: {
+          A: "Filtrar automáticamente correos electrónicos para marcar los spam vs. no-spam.",
+          B: "Predecir el precio exacto de una casa en dólares.",
+          C: "Traducir un párrafo de un idioma a otro.",
+          D: "Agrupar clientes en segmentos según su comportamiento de compra, sin etiquetas previas."
+        },
+        correct: "A",
+        explanation: "En clasificación, el modelo aprende a asignar categorías o etiquetas discretas. Identificar correos como “spam” o “no spam” es un ejemplo típico de clasificación binaria."
+      },
+      {
+        question: "Pregunta 18: Tienes datos históricos de ventas y quieres predecir el ingreso ($) que tendrá la empresa el próximo mes. ¿Qué tipo de técnica de machine learning es la más apropiada?",
+        options: {
+          A: "Regresión.",
+          B: "Clasificación.",
+          C: "Clustering.",
+          D: "Aprendizaje por refuerzo."
+        },
+        correct: "A",
+        explanation: "Regresión es la técnica de ML utilizada para predecir valores numéricos continuos, como los ingresos de una empresa."
+      },
+      {
+        question: "Pregunta 19: Quieres segmentar a tus clientes en grupos distintos según patrones de compra, sin saber de antemano cuántos grupos habrá ni definir etiquetas. ¿Qué tipo de aprendizaje automático debes usar?",
+        options: {
+          A: "Clustering (agrupamiento no supervisado).",
+          B: "Clasificación supervisada.",
+          C: "Regresión lineal.",
+          D: "Aprendizaje por refuerzo."
+        },
+        correct: "A",
+        explanation: "El clustering es una técnica de aprendizaje no supervisado que intenta agrupar datos similares sin usar etiquetas predefinidas."
+      },
+      {
+        question: "Pregunta 20: En un conjunto de datos para ML, ¿a qué nos referimos con la etiqueta o label de cada ejemplo?",
+        options: {
+          A: "Al valor de salida o resultado correcto que el modelo debe predecir (variable objetivo) para ese ejemplo.",
+          B: "A una de las características de entrada del ejemplo, típicamente la primera columna del dataset.",
+          C: "A un identificador único (ID) que distingue cada fila del conjunto de datos.",
+          D: "A un nombre opcional que le damos al conjunto de datos para referenciarlo."
+        },
+        correct: "A",
+        explanation: "En aprendizaje supervisado, la etiqueta (label) es el valor de salida correcto que queremos que el modelo aprenda a predecir."
+      },
+      {
+        question: "Pregunta 21: ¿Para qué se utiliza un conjunto de datos de validación durante el entrenamiento de un modelo de machine learning?",
+        options: {
+          A: "Para evaluar el desempeño del modelo mientras se ajustan sus hiperparámetros, evitando sobreajuste, antes de la prueba final.",
+          B: "Para entrenar inicialmente al modelo ajustando sus pesos.",
+          C: "Es el conjunto final para hacer pruebas una vez terminado el entrenamiento.",
+          D: "Contiene datos de producción en tiempo real para hacer inferencia."
+        },
+        correct: "A",
+        explanation: "El conjunto de validación se extrae del dataset de entrenamiento y se usa para ajustar el modelo y obtener una estimación de su desempeño generalizable."
+      },
+      {
+        question: "Pregunta 22: ¿Cuál es el propósito del conjunto de datos de prueba (test set) en un proyecto de aprendizaje automático?",
+        options: {
+          A: "Proporcionar una evaluación imparcial y final del rendimiento de un modelo ya entrenado, usando datos que el modelo nunca vio en entrenamiento.",
+          B: "Ajustar el modelo durante el entrenamiento, como parte de la optimización de hiperparámetros.",
+          C: "Almacenar datos que se descartan y no se utilizan en absoluto.",
+          D: "Sirve para entrenar al modelo junto con el conjunto de entrenamiento."
+        },
+        correct: "A",
+        explanation: "El conjunto de prueba se reserva para medir cómo de bien generaliza el modelo a datos completamente nuevos."
+      },
+      {
+        question: "Pregunta 23: Un modelo de ML entrena con excelente precisión en los datos de entrenamiento, pero rinde muy mal con datos nuevos. ¿Qué problema está ocurriendo?",
+        options: {
+          A: "Sobreajuste (overfitting), el modelo memorizó demasiado los datos de entrenamiento y no generaliza bien.",
+          B: "Subajuste (underfitting), el modelo es demasiado simple y no aprendió patrones suficientes.",
+          C: "Buena generalización, el modelo está funcionando correctamente.",
+          D: "Mala elección de conjunto de pruebas, los datos nuevos no eran representativos."
+        },
+        correct: "A",
+        explanation: "El síntoma descrito corresponde al sobreajuste: el modelo se ha ajustado tanto a los datos de entrenamiento que pierde capacidad de generalización."
+      },
+      {
+        question: "Pregunta 24: Si un modelo es demasiado sencillo o se entrena muy poco, y ni siquiera logra buen desempeño con los datos de entrenamiento, ¿qué problema presenta?",
+        options: {
+          A: "Subajuste (underfitting), el modelo no captura suficientemente los patrones de los datos por falta de capacidad o entrenamiento.",
+          B: "Sobreajuste (overfitting).",
+          C: "Regularización excesiva.",
+          D: "Data drift (desvío de datos)."
+        },
+        correct: "A",
+        explanation: "Subajuste significa que el modelo no logra aprender bien la estructura de los datos de entrenamiento, generalmente porque es demasiado simple o no se ha entrenado lo suficiente."
+      },
+    ];
+
+    const container = document.getElementById('questions-container');
+
+    questions.forEach((q, index) => {
+      const div = document.createElement('div');
+      div.className = 'question';
+      div.setAttribute('data-correct', q.correct);
+      const title = document.createElement('h3');
+      title.textContent = `${index + 1}. ${q.question}`;
+      div.appendChild(title);
+      for (let key in q.options) {
+        const opt = document.createElement('div');
+        opt.className = 'option';
+        opt.setAttribute('data-option', key);
+        opt.textContent = `${key}. ${q.options[key]}`;
+        div.appendChild(opt);
+      }
+      const explanation = document.createElement('div');
+      explanation.className = 'explanation';
+      explanation.innerHTML = `<strong>Explicación:</strong> ${q.explanation}`;
+      div.appendChild(explanation);
+      container.appendChild(div);
+    });
+
+    document.addEventListener('click', function(e) {
+      if (e.target.classList.contains('option')) {
+        const option = e.target;
+        const question = option.closest('.question');
+        const correct = question.getAttribute('data-correct');
+        const explanation = question.querySelector('.explanation');
+        if (option.classList.contains('correct') || option.classList.contains('incorrect')) return;
+        const selected = option.getAttribute('data-option');
+        if (selected === correct) {
+          option.classList.add('correct');
+        } else {
+          option.classList.add('incorrect');
+          question.querySelector(`.option[data-option="${correct}"]`).classList.add('correct');
+        }
+        explanation.style.display = 'block';
+      }
+    });
+  </script>
+  <script type="text/javascript">
+    function googleTranslateElementInit() {
+      new google.translate.TranslateElement({pageLanguage: 'es', includedLanguages: 'en,es'}, 'google_translate_element');
+    }
+    function setLanguage(lang) {
+      var combo = document.querySelector('select.goog-te-combo');
+      if (combo) {
+        combo.value = lang;
+        combo.dispatchEvent(new Event('change'));
+      }
+    }
+    document.getElementById('btn-en').addEventListener('click', function(){setLanguage('en');});
+    document.getElementById('btn-es').addEventListener('click', function(){setLanguage('es');});
+  </script>
+  <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+</body>
+</html>
