@@ -1162,6 +1162,21 @@
       }
     }
 
+    function equalizeOptionLengths(options) {
+      const filler = ' En este contexto particular.';
+      Object.keys(options).forEach(key => {
+        options[key] += filler;
+      });
+      const max = Math.max(...Object.values(options).map(text => text.length));
+      Object.keys(options).forEach(key => {
+        let text = options[key];
+        while (text.length < max) {
+          text += filler;
+        }
+        options[key] = text;
+      });
+    }
+
     function shuffleOptions(q) {
       const letters = ['A', 'B', 'C', 'D', 'E'];
       const entries = Object.entries(q.options);
@@ -1180,6 +1195,7 @@
     function renderQuestions() {
       container.innerHTML = '';
       questions.forEach((q, index) => {
+        equalizeOptionLengths(q.options);
         shuffleOptions(q);
         const div = document.createElement('div');
         div.className = 'question';
