@@ -1,0 +1,1256 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Test AI-900 - Parte 1</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; background-color: #f2f2f2; }
+    .question { background: white; padding: 15px; margin-bottom: 20px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+    .question h3 { margin-top: 0; }
+    .option { margin: 5px 0; padding: 10px; border-radius: 5px; background-color: #e0e0e0; cursor: pointer; }
+    .option:hover { background-color: #d5d5d5; }
+    .option.correct { background-color: #a5d6a7; }
+    .option.incorrect { background-color: #ef9a9a; }
+    .explanation { display: none; margin-top: 10px; padding: 10px; background: #dfe6e9; border-left: 4px solid #636e72; }
+    .nav { margin-bottom: 20px; }
+    .nav a { margin-right: 10px; text-decoration: none; color: #2d3436; font-weight: bold; }
+    .translate-btn {
+      display: inline-block;
+      margin: 5px;
+      padding: 10px 20px;
+      background-color: #6c5ce7;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    #scroll-top-btn {
+      position: fixed;
+      right: 10px;
+      bottom: 20px;
+      padding: 10px 15px;
+      background-color: #0984e3;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="nav">
+    <a href="test_ai900_parte1.html">Parte 1</a>
+    <a href="test_ai900_parte2.html">Parte 2</a>
+    <a href="test_ai900_parte3.html">Parte 3</a>
+    <a href="test_ai900_parte4.html">Parte 4</a>
+  </div>
+  <h1>Test interactivo AI-900 - Parte 1</h1>
+  <div>
+    <button class="translate-btn" id="btn-es">Español</button>
+    <button class="translate-btn" id="btn-en">English</button>
+    <button class="translate-btn" id="reroll-btn">Reordenar preguntas</button>
+  <div id="google_translate_element" style="display:none;"></div>
+  </div>
+  <div id="questions-container"></div>
+  <button id="scroll-top-btn">Subir arriba</button>
+  <script>
+    const questions = [
+    {
+  "question": "Pregunta 1: ¿Qué beneficio empresarial puede esperar una empresa tras crear un bot de chat web para responder consultas comunes de clientes?",
+  "options": {
+    "A": "Aumento de ventas.",
+    "B": "Reducción de la carga de trabajo de los agentes de atención al cliente.",
+    "C": "Mejora de la fiabilidad del producto."
+  },
+  "correct": "B",
+  "explanation": "El uso de un bot de chat web permite automatizar respuestas frecuentes, reduciendo así la carga de trabajo de los agentes humanos."
+},
+{
+  "question": "Pregunta 2: ¿Cómo deberías dividir los datos para entrenamiento y evaluación en un proceso de Machine Learning?",
+  "options": {
+    "A": "Usar características para entrenar y etiquetas para evaluar.",
+    "B": "Dividir aleatoriamente las filas de los datos para entrenamiento y evaluación.",
+    "C": "Usar etiquetas para entrenar y características para evaluar.",
+    "D": "Dividir aleatoriamente las columnas de los datos para entrenamiento y evaluación."
+  },
+  "correct": "B",
+  "explanation": "La forma correcta es dividir aleatoriamente las filas de los datos para que el modelo generalice mejor."
+},
+{
+  "question": "Pregunta 3: ¿Qué significa el valor True Positive (TP) en una matriz de confusión al evaluar un modelo de clasificación?",
+  "options": {
+    "A": "Casos donde la predicción y el valor real son 1.",
+    "B": "Casos donde la predicción es 1 y el valor real es 0.",
+    "C": "Casos donde la predicción es 0 y el valor real es 1."
+  },
+  "correct": "A",
+  "explanation": "Un True Positive (TP) es cuando tanto la predicción como el valor real son positivos (1)."
+},
+{
+  "question": "Pregunta 4: ¿Qué opción debes habilitar para cumplir con el principio de transparencia de Microsoft en IA al entrenar modelos con AutoML?",
+  "options": {
+    "A": "Establecer el tipo de validación en Automático.",
+    "B": "Habilitar la explicación del mejor modelo.",
+    "C": "Establecer la métrica principal en precisión.",
+    "D": "Establecer iteraciones concurrentes máximas en 0."
+  },
+  "correct": "B",
+  "explanation": "La explicación del modelo permite comprender el impacto de cada característica y aporta transparencia."
+},
+{
+  "question": "Pregunta 5: ¿Detectar transacciones fraudulentas y valores anómalos corresponde a detección de anomalías?",
+  "options": {
+    "A": "Sí.",
+    "B": "No."
+  },
+  "correct": "A",
+  "explanation": "La detección de anomalías permite identificar fraudes o valores inusuales en los datos."
+},
+{
+  "question": "Pregunta 6: ¿Cuál es el principio de IA responsable de Microsoft que asegura que los sistemas de IA funcionen de forma fiable y segura?",
+  "options": {
+    "A": "Fiabilidad y seguridad.",
+    "B": "Inclusividad.",
+    "C": "Transparencia.",
+    "D": "Equidad."
+  },
+  "correct": "A",
+  "explanation": "La fiabilidad y seguridad garantizan que los sistemas de IA actúen como se espera, incluso ante situaciones imprevistas."
+},
+{
+  "question": "Pregunta 7: ¿Qué principio guía de Microsoft para la IA responsable busca que la tecnología beneficie a personas con discapacidades?",
+  "options": {
+    "A": "Equidad.",
+    "B": "Inclusividad.",
+    "C": "Fiabilidad y seguridad.",
+    "D": "Responsabilidad."
+  },
+  "correct": "B",
+  "explanation": "La inclusividad trata de que la IA beneficie a todas las personas, incluidas aquellas con discapacidades."
+},
+{
+  "question": "Pregunta 8: ¿Cuál de los siguientes es un principio guía de Microsoft para la IA responsable?",
+  "options": {
+    "A": "Fiabilidad y seguridad.",
+    "B": "Decisión.",
+    "C": "Opinión.",
+    "D": "Productividad."
+  },
+  "correct": "A",
+  "explanation": "Fiabilidad y seguridad es uno de los principios guía de Microsoft para la IA responsable."
+},
+{
+  "question": "Pregunta 9: ¿Qué es el aprendizaje profundo (Deep Learning)?",
+  "options": {
+    "A": "Un tipo de aprendizaje automático basado en redes neuronales con múltiples capas.",
+    "B": "Un algoritmo basado únicamente en lógica booleana.",
+    "C": "Un modelo matemático de baja complejidad.",
+    "D": "Un método para clasificar imágenes usando árboles de decisión."
+  },
+  "correct": "A",
+  "explanation": "El aprendizaje profundo es una rama del aprendizaje automático basada en redes neuronales con muchas capas, capaces de aprender patrones complejos."
+},
+{
+  "question": "Pregunta 10: ¿Cuál es una ventaja principal del aprendizaje profundo sobre otros métodos de Machine Learning?",
+  "options": {
+    "A": "Puede aprender representaciones de datos complejas sin ingeniería manual de características.",
+    "B": "No necesita datos para entrenarse.",
+    "C": "Siempre requiere menos recursos computacionales.",
+    "D": "No es necesario ajustar parámetros."
+  },
+  "correct": "A",
+  "explanation": "Las redes profundas pueden aprender automáticamente representaciones complejas de los datos, evitando la necesidad de extraer manualmente características."
+},
+{
+  "question": "Pregunta 11: ¿Cuál de los siguientes es un ejemplo de aprendizaje supervisado?",
+  "options": {
+    "A": "Entrenar un modelo para predecir precios de viviendas usando datos históricos con precios conocidos.",
+    "B": "Agrupar clientes en segmentos sin etiquetas.",
+    "C": "Buscar patrones ocultos en datos no etiquetados.",
+    "D": "Entrenar un agente a través de recompensas y penalizaciones."
+  },
+  "correct": "A",
+  "explanation": "En el aprendizaje supervisado, el modelo aprende a partir de ejemplos con etiquetas conocidas, como predecir precios con datos históricos."
+},
+{
+  "question": "Pregunta 12: ¿Qué es el aprendizaje no supervisado?",
+  "options": {
+    "A": "El modelo aprende patrones en datos sin etiquetas.",
+    "B": "El modelo necesita etiquetas para cada dato.",
+    "C": "Siempre requiere supervisión humana directa.",
+    "D": "Solo se utiliza para imágenes."
+  },
+  "correct": "A",
+  "explanation": "El aprendizaje no supervisado busca patrones o agrupaciones en datos donde no hay etiquetas predefinidas."
+},
+{
+  "question": "Pregunta 13: ¿Cuál es una técnica común de aprendizaje no supervisado?",
+  "options": {
+    "A": "Clustering (agrupamiento).",
+    "B": "Regresión lineal.",
+    "C": "Clasificación binaria.",
+    "D": "Árboles de decisión."
+  },
+  "correct": "A",
+  "explanation": "El clustering agrupa datos similares sin necesidad de etiquetas, y es típico del aprendizaje no supervisado."
+},
+{
+  "question": "Pregunta 14: ¿Qué es aprendizaje por refuerzo?",
+  "options": {
+    "A": "Un tipo de aprendizaje automático donde un agente aprende tomando acciones y recibiendo recompensas o penalizaciones.",
+    "B": "El modelo solo agrupa datos sin etiquetas.",
+    "C": "Un método que solo funciona para imágenes.",
+    "D": "Un proceso sin retroalimentación alguna."
+  },
+  "correct": "A",
+  "explanation": "El aprendizaje por refuerzo consiste en entrenar un agente mediante un sistema de recompensas y penalizaciones basado en sus acciones."
+},
+{
+  "question": "Pregunta 15: ¿Qué representa la métrica de precisión (accuracy) en clasificación?",
+  "options": {
+    "A": "El porcentaje de predicciones correctas sobre el total de predicciones.",
+    "B": "El porcentaje de falsos positivos.",
+    "C": "El número total de errores cometidos.",
+    "D": "La diferencia entre los valores máximos y mínimos."
+  },
+  "correct": "A",
+  "explanation": "La precisión mide el porcentaje de aciertos de un modelo respecto al total de predicciones realizadas."
+},
+{
+  "question": "Pregunta 16: ¿Cuál es el propósito del conjunto de datos de prueba (test set) en Machine Learning?",
+  "options": {
+    "A": "Evaluar el desempeño final de un modelo con datos que no ha visto durante el entrenamiento.",
+    "B": "Ajustar los hiperparámetros del modelo.",
+    "C": "Entrenar el modelo desde cero.",
+    "D": "Reducir el número de características."
+  },
+  "correct": "A",
+  "explanation": "El conjunto de prueba se utiliza únicamente para evaluar la capacidad del modelo de generalizar a datos no vistos."
+},
+{
+  "question": "Pregunta 17: ¿Qué es la matriz de confusión en el contexto de modelos de clasificación?",
+  "options": {
+    "A": "Una tabla que muestra los verdaderos positivos, falsos positivos, verdaderos negativos y falsos negativos.",
+    "B": "Un algoritmo de aprendizaje no supervisado.",
+    "C": "Una técnica para preprocesar datos.",
+    "D": "Un método para dividir conjuntos de datos."
+  },
+  "correct": "A",
+  "explanation": "La matriz de confusión es una tabla que resume el rendimiento de un modelo de clasificación mostrando las verdaderas y falsas predicciones positivas y negativas."
+},
+{
+  "question": "Pregunta 18: ¿Qué significa 'overfitting' (sobreajuste) en un modelo de aprendizaje automático?",
+  "options": {
+    "A": "El modelo aprende tan bien los datos de entrenamiento que falla al generalizar con datos nuevos.",
+    "B": "El modelo no aprende suficiente de los datos de entrenamiento.",
+    "C": "El modelo es siempre más rápido.",
+    "D": "El modelo tiene la menor complejidad posible."
+  },
+  "correct": "A",
+  "explanation": "El sobreajuste ocurre cuando el modelo memoriza el entrenamiento y no puede generalizar correctamente a nuevos datos."
+},
+{
+  "question": "Pregunta 19: ¿Cuál es una forma común de prevenir el sobreajuste?",
+  "options": {
+    "A": "Utilizar regularización o técnicas como dropout.",
+    "B": "Reducir el número de datos de entrenamiento.",
+    "C": "Aumentar el número de capas sin control.",
+    "D": "Usar únicamente los datos de validación."
+  },
+  "correct": "A",
+  "explanation": "La regularización, el uso de dropout o el aumento de datos son técnicas para reducir el sobreajuste."
+},
+{
+  "question": "Pregunta 20: ¿Qué es el preprocesamiento de datos en Machine Learning?",
+  "options": {
+    "A": "El conjunto de pasos para limpiar, transformar y preparar los datos antes del entrenamiento.",
+    "B": "El proceso de ajustar hiperparámetros.",
+    "C": "El entrenamiento del modelo con todos los datos.",
+    "D": "La generación de etiquetas falsas."
+  },
+  "correct": "A",
+  "explanation": "Preprocesar datos implica limpiar, normalizar y transformar los datos para que sean aptos para el entrenamiento del modelo."
+},
+{
+  "question": "Pregunta 21: ¿Para qué sirve la validación cruzada en el entrenamiento de modelos?",
+  "options": {
+    "A": "Para evaluar el desempeño del modelo dividiendo los datos en múltiples subconjuntos y promediando los resultados.",
+    "B": "Para crear nuevas variables.",
+    "C": "Para mezclar etiquetas aleatoriamente.",
+    "D": "Para reducir la cantidad de datos."
+  },
+  "correct": "A",
+  "explanation": "La validación cruzada ayuda a estimar el rendimiento del modelo dividiendo y probando varias veces en subconjuntos diferentes."
+},
+{
+  "question": "Pregunta 22: ¿Cuál de las siguientes afirmaciones sobre los algoritmos de clustering es correcta?",
+  "options": {
+    "A": "Agrupan datos sin utilizar etiquetas.",
+    "B": "Solo funcionan con datos etiquetados.",
+    "C": "Siempre requieren supervisión humana.",
+    "D": "Clasifican los datos en función de reglas fijas."
+  },
+  "correct": "A",
+  "explanation": "Los algoritmos de clustering (agrupamiento) buscan patrones y agrupan datos similares sin necesidad de etiquetas previas."
+},
+{
+  "question": "Pregunta 23: ¿Cuál de los siguientes es un ejemplo de una característica (feature) en Machine Learning?",
+  "options": {
+    "A": "La edad de una persona en un modelo para predecir ingresos.",
+    "B": "El algoritmo usado.",
+    "C": "El conjunto de test.",
+    "D": "El tipo de ordenador empleado."
+  },
+  "correct": "A",
+  "explanation": "Las características o features son variables de entrada, como la edad, que el modelo utiliza para hacer predicciones."
+},
+{
+  "question": "Pregunta 24: ¿Qué es un hiperparámetro en el contexto de Machine Learning?",
+  "options": {
+    "A": "Un parámetro que se ajusta antes del entrenamiento y controla el comportamiento del modelo.",
+    "B": "El valor de salida que predice el modelo.",
+    "C": "El número de filas en el conjunto de datos.",
+    "D": "El resultado de una predicción."
+  },
+  "correct": "A",
+  "explanation": "Los hiperparámetros controlan el aprendizaje del modelo y se establecen antes de entrenar, como la tasa de aprendizaje o el número de capas."
+},
+{
+  "question": "Pregunta 25: ¿Qué representa el término 'feature engineering' en Machine Learning?",
+  "options": {
+    "A": "El proceso de crear, transformar o seleccionar variables de entrada para mejorar el rendimiento del modelo.",
+    "B": "El proceso de ajustar hiperparámetros automáticamente.",
+    "C": "El entrenamiento de una red neuronal profunda.",
+    "D": "La validación cruzada de un modelo."
+  },
+  "correct": "A",
+  "explanation": "La ingeniería de características consiste en preparar y derivar nuevas variables para que el modelo aprenda mejor."
+},
+{
+  "question": "Pregunta 26: ¿Qué es un modelo supervisado?",
+  "options": {
+    "A": "Un modelo entrenado con ejemplos donde la salida deseada (etiqueta) es conocida.",
+    "B": "Un modelo que solo agrupa datos sin etiquetas.",
+    "C": "Un algoritmo que se entrena sin ninguna información previa.",
+    "D": "Un modelo que funciona solo con imágenes."
+  },
+  "correct": "A",
+  "explanation": "El aprendizaje supervisado utiliza ejemplos con etiquetas conocidas para entrenar el modelo."
+},
+{
+  "question": "Pregunta 27: ¿Qué es un modelo no supervisado?",
+  "options": {
+    "A": "Un modelo entrenado sin usar etiquetas, buscando patrones en los datos.",
+    "B": "Un modelo que siempre necesita etiquetas.",
+    "C": "Un modelo que nunca aprende de los datos.",
+    "D": "Un algoritmo de ajuste de hiperparámetros."
+  },
+  "correct": "A",
+  "explanation": "El aprendizaje no supervisado se basa en descubrir patrones o agrupaciones en datos sin etiquetas."
+},
+{
+  "question": "Pregunta 28: ¿Qué es el preprocesamiento de datos de texto?",
+  "options": {
+    "A": "La limpieza, normalización y conversión de texto a un formato adecuado para análisis.",
+    "B": "La conversión de texto en imágenes.",
+    "C": "El uso de audio para entrenar modelos de lenguaje.",
+    "D": "El ajuste automático de hiperparámetros."
+  },
+  "correct": "A",
+  "explanation": "El preprocesamiento textual incluye limpiar, normalizar y vectorizar textos antes de entrenar modelos de NLP."
+},
+{
+  "question": "Pregunta 29: ¿Qué es la vectorización de texto en el contexto de NLP?",
+  "options": {
+    "A": "La transformación de palabras o documentos en representaciones numéricas que pueden procesar los modelos de Machine Learning.",
+    "B": "La conversión de números en texto.",
+    "C": "El agrupamiento de imágenes por temas.",
+    "D": "El ajuste de los hiperparámetros de un modelo."
+  },
+  "correct": "A",
+  "explanation": "Vectorizar texto es necesario para que los modelos puedan procesar lenguaje, convirtiendo palabras a vectores numéricos."
+},
+{
+  "question": "Pregunta 30: ¿Qué es el 'tokenization' (tokenización) en NLP?",
+  "options": {
+    "A": "El proceso de dividir el texto en unidades más pequeñas como palabras o subpalabras.",
+    "B": "El cifrado de datos de texto.",
+    "C": "La agrupación de datos numéricos.",
+    "D": "La transformación de texto en audio."
+  },
+  "correct": "A",
+  "explanation": "La tokenización consiste en separar el texto en partes manejables, como palabras o frases, para su análisis."
+},
+{
+  "question": "Pregunta 31: ¿Cuál es el objetivo de la eliminación de stopwords en NLP?",
+  "options": {
+    "A": "Eliminar palabras frecuentes sin valor semántico relevante para mejorar el análisis del texto.",
+    "B": "Eliminar todos los sustantivos.",
+    "C": "Borrar los números del texto.",
+    "D": "Traducir el texto a otro idioma."
+  },
+  "correct": "A",
+  "explanation": "Las stopwords son palabras muy comunes que generalmente no aportan información útil al análisis de texto."
+},
+{
+  "question": "Pregunta 32: ¿Qué es la lematización en el procesamiento de lenguaje natural?",
+  "options": {
+    "A": "Reducir las palabras a su forma base o diccionario para un análisis más coherente.",
+    "B": "Eliminar todas las palabras largas del texto.",
+    "C": "Traducir oraciones completas automáticamente.",
+    "D": "Agrupar palabras por su longitud."
+  },
+  "correct": "A",
+  "explanation": "La lematización convierte las palabras a su forma canónica, lo que ayuda a tratar variantes de la misma palabra como equivalentes."
+},
+{
+  "question": "Pregunta 33: ¿Qué es la normalización de datos en Machine Learning?",
+  "options": {
+    "A": "Un proceso para escalar los valores de las variables numéricas a un rango común.",
+    "B": "La agrupación de datos en clústeres.",
+    "C": "La codificación de texto en números.",
+    "D": "La eliminación de todas las columnas del conjunto de datos."
+  },
+  "correct": "A",
+  "explanation": "La normalización facilita que los modelos de ML procesen correctamente las variables que originalmente tienen escalas diferentes."
+},
+{
+  "question": "Pregunta 34: ¿Qué es el one-hot encoding?",
+  "options": {
+    "A": "Un método para convertir variables categóricas en vectores binarios.",
+    "B": "Un proceso de reducción de dimensionalidad.",
+    "C": "La normalización de variables continuas.",
+    "D": "Una técnica de validación cruzada."
+  },
+  "correct": "A",
+  "explanation": "El one-hot encoding convierte cada categoría en un vector binario, permitiendo el uso de variables categóricas en modelos ML."
+},
+{
+  "question": "Pregunta 35: ¿Cuál es el objetivo de la reducción de dimensionalidad en Machine Learning?",
+  "options": {
+    "A": "Reducir el número de variables de entrada manteniendo la mayor cantidad de información posible.",
+    "B": "Aumentar la cantidad de datos de entrada.",
+    "C": "Dividir los datos en subconjuntos para entrenamiento.",
+    "D": "Crear nuevas etiquetas para el modelo."
+  },
+  "correct": "A",
+  "explanation": "Reducir la dimensionalidad ayuda a simplificar los modelos, reducir el tiempo de entrenamiento y evitar el sobreajuste."
+},
+{
+  "question": "Pregunta 36: ¿Qué es el PCA (Análisis de Componentes Principales)?",
+  "options": {
+    "A": "Una técnica de reducción de dimensionalidad que proyecta los datos en un nuevo espacio de menor dimensión.",
+    "B": "Un algoritmo de clustering.",
+    "C": "Una métrica de evaluación.",
+    "D": "Un método para convertir texto en audio."
+  },
+  "correct": "A",
+  "explanation": "PCA transforma los datos en componentes principales, que explican la mayor parte de la varianza de los datos originales."
+},
+{
+  "question": "Pregunta 37: ¿Qué es el K-means?",
+  "options": {
+    "A": "Un algoritmo de clustering que agrupa datos en K grupos según su similitud.",
+    "B": "Un método para reducir el sobreajuste.",
+    "C": "Un modelo de clasificación supervisada.",
+    "D": "Una técnica para preprocesar texto."
+  },
+  "correct": "A",
+  "explanation": "K-means asigna los datos a uno de K grupos basados en la distancia a los centroides, es ampliamente usado en clustering."
+},
+{
+  "question": "Pregunta 38: ¿Qué es la regresión lineal?",
+  "options": {
+    "A": "Un modelo para predecir valores numéricos continuos a partir de variables independientes.",
+    "B": "Un método para clasificar imágenes.",
+    "C": "Un algoritmo de agrupamiento.",
+    "D": "Una técnica para validar modelos."
+  },
+  "correct": "A",
+  "explanation": "La regresión lineal ajusta una línea a los datos para predecir valores continuos, como precios o temperaturas."
+},
+{
+  "question": "Pregunta 39: ¿Qué es un árbol de decisión?",
+  "options": {
+    "A": "Un modelo de clasificación o regresión que toma decisiones dividiendo los datos en ramas según sus características.",
+    "B": "Un método para crear nuevas variables.",
+    "C": "Una técnica para validar hiperparámetros.",
+    "D": "Un proceso de tokenización de texto."
+  },
+  "correct": "A",
+  "explanation": "Los árboles de decisión dividen los datos en subconjuntos más pequeños basándose en reglas derivadas de las características."
+},
+{
+  "question": "Pregunta 40: ¿Qué es un bosque aleatorio (Random Forest)?",
+  "options": {
+    "A": "Un conjunto de árboles de decisión entrenados sobre diferentes subconjuntos de los datos y características.",
+    "B": "Un algoritmo para reducir la dimensionalidad.",
+    "C": "Un método para tokenizar texto.",
+    "D": "Una red neuronal de una sola capa."
+  },
+  "correct": "A",
+  "explanation": "El Random Forest combina varios árboles de decisión para mejorar la precisión y la robustez de las predicciones."
+},
+{
+  "question": "Pregunta 41: ¿Qué es un algoritmo de clasificación?",
+  "options": {
+    "A": "Un algoritmo que asigna una etiqueta o clase a cada ejemplo de datos.",
+    "B": "Un método de reducción de dimensionalidad.",
+    "C": "Un algoritmo para agrupar datos sin etiquetas.",
+    "D": "Una técnica para transformar variables categóricas."
+  },
+  "correct": "A",
+  "explanation": "Los algoritmos de clasificación predicen etiquetas o clases para nuevos ejemplos basándose en datos de entrenamiento etiquetados."
+},
+{
+  "question": "Pregunta 42: ¿Cuál es un ejemplo común de algoritmo de clasificación supervisada?",
+  "options": {
+    "A": "Árbol de decisión.",
+    "B": "K-means.",
+    "C": "PCA.",
+    "D": "Tokenización."
+  },
+  "correct": "A",
+  "explanation": "Los árboles de decisión son ampliamente utilizados para problemas de clasificación donde las clases son conocidas."
+},
+{
+  "question": "Pregunta 43: ¿Qué es la regresión logística?",
+  "options": {
+    "A": "Un algoritmo de clasificación para predecir probabilidades de pertenecer a una clase.",
+    "B": "Un algoritmo de clustering.",
+    "C": "Un método de reducción de dimensionalidad.",
+    "D": "Una técnica para convertir texto en audio."
+  },
+  "correct": "A",
+  "explanation": "La regresión logística se utiliza para problemas de clasificación binaria, estimando la probabilidad de una clase."
+},
+{
+  "question": "Pregunta 44: ¿Qué representa la métrica de recall (sensibilidad) en un modelo de clasificación?",
+  "options": {
+    "A": "La proporción de verdaderos positivos correctamente identificados sobre el total de positivos reales.",
+    "B": "El porcentaje de predicciones correctas.",
+    "C": "La proporción de falsos positivos.",
+    "D": "El número total de errores."
+  },
+  "correct": "A",
+  "explanation": "El recall mide la capacidad del modelo para detectar todos los positivos verdaderos, es decir, su sensibilidad."
+},
+{
+  "question": "Pregunta 45: ¿Qué representa la métrica de precisión (precision) en un modelo de clasificación?",
+  "options": {
+    "A": "La proporción de verdaderos positivos sobre el total de predicciones positivas.",
+    "B": "La proporción de verdaderos negativos.",
+    "C": "El porcentaje de errores del modelo.",
+    "D": "El número de ejemplos correctamente clasificados."
+  },
+  "correct": "A",
+  "explanation": "La precisión indica cuántos de los ejemplos que el modelo predijo como positivos realmente lo son."
+},
+{
+  "question": "Pregunta 46: ¿Qué es el F1-score?",
+  "options": {
+    "A": "La media armónica entre precisión y recall, usada para evaluar modelos de clasificación.",
+    "B": "Un método de reducción de dimensionalidad.",
+    "C": "Una técnica de vectorización de texto.",
+    "D": "Un tipo de árbol de decisión."
+  },
+  "correct": "A",
+  "explanation": "El F1-score combina precisión y recall en una sola métrica, útil cuando existe un desequilibrio entre clases."
+},
+{
+  "question": "Pregunta 47: ¿Qué es el análisis de componentes principales (PCA) y para qué se utiliza?",
+  "options": {
+    "A": "Una técnica de reducción de dimensionalidad para encontrar las direcciones de máxima varianza en los datos.",
+    "B": "Un algoritmo de clustering.",
+    "C": "Un método de clasificación supervisada.",
+    "D": "Una técnica para preprocesar texto."
+  },
+  "correct": "A",
+  "explanation": "El PCA transforma los datos originales en un nuevo conjunto de variables (componentes principales) que explican la mayor parte de la varianza."
+},
+{
+  "question": "Pregunta 48: ¿Qué es un modelo de Machine Learning basado en ensembles (conjuntos)?",
+  "options": {
+    "A": "Un modelo que combina varios modelos individuales para mejorar la precisión de las predicciones.",
+    "B": "Un único modelo de regresión lineal.",
+    "C": "Una técnica de validación cruzada.",
+    "D": "Un método para eliminar características irrelevantes."
+  },
+  "correct": "A",
+  "explanation": "Los modelos ensemble combinan múltiples modelos (como Random Forest o Gradient Boosting) para obtener mejores resultados que modelos individuales."
+},
+{
+  "question": "Pregunta 49: ¿Qué es el aprendizaje profundo (deep learning)?",
+  "options": {
+    "A": "Una rama del aprendizaje automático que utiliza redes neuronales con muchas capas para aprender representaciones complejas de los datos.",
+    "B": "Una técnica de reducción de dimensionalidad.",
+    "C": "Un método de agrupamiento de datos sin etiquetas.",
+    "D": "Una técnica de validación cruzada."
+  },
+  "correct": "A",
+  "explanation": "El aprendizaje profundo emplea redes neuronales profundas para aprender automáticamente representaciones jerárquicas a partir de grandes volúmenes de datos."
+},
+{
+  "question": "Pregunta 50: ¿Qué es una red neuronal artificial?",
+  "options": {
+    "A": "Un modelo de Machine Learning inspirado en la estructura y funcionamiento del cerebro humano.",
+    "B": "Un algoritmo de agrupamiento.",
+    "C": "Una técnica de reducción de dimensionalidad.",
+    "D": "Una técnica de vectorización de texto."
+  },
+  "correct": "A",
+  "explanation": "Las redes neuronales artificiales simulan el funcionamiento de las neuronas humanas y son la base de muchos modelos de IA modernos."
+},
+{
+  "question": "Pregunta 51: ¿Qué son las capas ocultas en una red neuronal?",
+  "options": {
+    "A": "Las capas entre la capa de entrada y la de salida, donde ocurre el procesamiento y aprendizaje de características.",
+    "B": "La capa de entrada de la red.",
+    "C": "La última capa de salida del modelo.",
+    "D": "Capas que sólo existen en redes de una sola capa."
+  },
+  "correct": "A",
+  "explanation": "Las capas ocultas permiten que la red aprenda representaciones complejas a través de múltiples transformaciones de los datos de entrada."
+},
+{
+  "question": "Pregunta 52: ¿Qué es la función de activación en una red neuronal?",
+  "options": {
+    "A": "Una función matemática que introduce no linealidades en el modelo y permite aprender relaciones complejas.",
+    "B": "Una técnica para reducir el tamaño de la red.",
+    "C": "Un método de regularización.",
+    "D": "Un algoritmo de agrupamiento."
+  },
+  "correct": "A",
+  "explanation": "Las funciones de activación (como ReLU, sigmoid o tanh) permiten que las redes aprendan patrones no lineales en los datos."
+},
+{
+  "question": "Pregunta 53: ¿Qué es el descenso de gradiente (gradient descent) en Machine Learning?",
+  "options": {
+    "A": "Un algoritmo de optimización que ajusta los parámetros del modelo minimizando la función de error.",
+    "B": "Una técnica de reducción de dimensionalidad.",
+    "C": "Un método para aumentar la regularización.",
+    "D": "Una función de activación de red neuronal."
+  },
+  "correct": "A",
+  "explanation": "El descenso de gradiente es el método más usado para entrenar modelos ajustando los parámetros en dirección al menor error."
+},
+{
+  "question": "Pregunta 54: ¿Qué es el aprendizaje supervisado?",
+  "options": {
+    "A": "Un tipo de aprendizaje en el que el modelo se entrena con ejemplos de entrada y salida conocidas (etiquetas).",
+    "B": "Un aprendizaje sin etiquetas.",
+    "C": "Un aprendizaje reforzado mediante recompensas.",
+    "D": "Un método basado únicamente en clustering."
+  },
+  "correct": "A",
+  "explanation": "El aprendizaje supervisado requiere datos etiquetados para que el modelo aprenda la relación entre entradas y salidas."
+},
+{
+  "question": "Pregunta 55: ¿Qué es el aprendizaje no supervisado?",
+  "options": {
+    "A": "Un tipo de aprendizaje donde el modelo descubre patrones en los datos sin etiquetas conocidas.",
+    "B": "Un aprendizaje basado en ejemplos etiquetados.",
+    "C": "Un método para optimizar hiperparámetros.",
+    "D": "Un método para ajustar funciones de activación."
+  },
+  "correct": "A",
+  "explanation": "En el aprendizaje no supervisado, el modelo intenta encontrar estructuras ocultas en los datos sin información sobre las salidas."
+},
+{
+  "question": "Pregunta 56: ¿Qué es el aprendizaje por refuerzo (reinforcement learning)?",
+  "options": {
+    "A": "Un tipo de aprendizaje en el que un agente aprende a tomar decisiones mediante recompensas o penalizaciones recibidas del entorno.",
+    "B": "Un método de regularización.",
+    "C": "Un tipo de aprendizaje supervisado clásico.",
+    "D": "Una técnica para agrupar datos sin etiquetas."
+  },
+  "correct": "A",
+  "explanation": "En el aprendizaje por refuerzo, el agente mejora sus acciones a través de la experiencia, buscando maximizar las recompensas acumuladas."
+},
+{
+  "question": "Pregunta 57: ¿Qué es un agente en aprendizaje por refuerzo?",
+  "options": {
+    "A": "Un ente que toma decisiones y realiza acciones en un entorno para maximizar una recompensa.",
+    "B": "Un modelo de clasificación supervisada.",
+    "C": "Un algoritmo de reducción de dimensionalidad.",
+    "D": "Una función de activación."
+  },
+  "correct": "A",
+  "explanation": "El agente es el componente principal del aprendizaje por refuerzo, encargado de explorar el entorno y aprender a partir de las recompensas."
+},
+{
+  "question": "Pregunta 58: ¿Qué es el entorno (environment) en aprendizaje por refuerzo?",
+  "options": {
+    "A": "El espacio o sistema con el que interactúa el agente y que le proporciona recompensas.",
+    "B": "La capa de entrada de una red neuronal.",
+    "C": "El conjunto de etiquetas del dataset.",
+    "D": "Un método de regularización."
+  },
+  "correct": "A",
+  "explanation": "El entorno es el escenario en el que el agente opera, recibiendo observaciones y recompensas según sus acciones."
+},
+{
+  "question": "Pregunta 59: ¿Qué es la política (policy) en aprendizaje por refuerzo?",
+  "options": {
+    "A": "La estrategia que sigue el agente para decidir qué acción tomar en cada estado.",
+    "B": "La función de activación utilizada en la red.",
+    "C": "El conjunto de hiperparámetros del modelo.",
+    "D": "Un algoritmo de agrupamiento."
+  },
+  "correct": "A",
+  "explanation": "La política define el comportamiento del agente, mapeando estados a acciones para maximizar la recompensa esperada."
+},
+{
+  "question": "Pregunta 60: ¿Qué es la función de valor en aprendizaje por refuerzo?",
+  "options": {
+    "A": "Una función que estima la recompensa total esperada desde un estado o acción determinados.",
+    "B": "Una función de activación.",
+    "C": "Un algoritmo de reducción de dimensionalidad.",
+    "D": "El método de tokenización usado."
+  },
+  "correct": "A",
+  "explanation": "La función de valor evalúa la calidad de un estado o acción, indicando cuán beneficioso es para el agente a largo plazo."
+},
+{
+  "question": "Pregunta 61: ¿Qué es la exploración en aprendizaje por refuerzo?",
+  "options": {
+    "A": "El proceso de probar nuevas acciones para descubrir cuáles ofrecen mayores recompensas.",
+    "B": "El ajuste de hiperparámetros.",
+    "C": "La reducción de dimensionalidad del espacio de estados.",
+    "D": "La tokenización de entradas."
+  },
+  "correct": "A",
+  "explanation": "Explorar es necesario para evitar quedarse atrapado en soluciones subóptimas y encontrar la mejor estrategia global."
+},
+{
+  "question": "Pregunta 62: ¿Qué es la explotación (exploitation) en aprendizaje por refuerzo?",
+  "options": {
+    "A": "El proceso de elegir acciones que el agente ya sabe que producen altas recompensas.",
+    "B": "La agrupación de datos en clústeres.",
+    "C": "El ajuste de hiperparámetros.",
+    "D": "La reducción del tamaño del modelo."
+  },
+  "correct": "A",
+  "explanation": "Explotar significa aprovechar el conocimiento adquirido para obtener la mayor recompensa posible."
+},
+{
+  "question": "Pregunta 63: ¿Qué es un modelo generativo en inteligencia artificial?",
+  "options": {
+    "A": "Un modelo capaz de crear nuevos datos similares a los del conjunto de entrenamiento, como imágenes o texto.",
+    "B": "Un modelo que solo clasifica datos.",
+    "C": "Un modelo de clustering clásico.",
+    "D": "Un modelo que solo reduce la dimensionalidad."
+  },
+  "correct": "A",
+  "explanation": "Los modelos generativos, como GPT o DALL-E, pueden crear nuevos contenidos aprendiendo de ejemplos previos."
+},
+{
+  "question": "Pregunta 64: ¿Qué es una Red Generativa Antagónica (GAN)?",
+  "options": {
+    "A": "Un tipo de red neuronal que enfrenta dos modelos (generador y discriminador) para crear datos sintéticos realistas.",
+    "B": "Un modelo basado únicamente en árboles de decisión.",
+    "C": "Una técnica de reducción de dimensionalidad.",
+    "D": "Un método de regularización."
+  },
+  "correct": "A",
+  "explanation": "Las GANs consisten en dos redes que compiten entre sí: una genera datos y la otra evalúa su realismo, mejorando así la calidad del contenido generado."
+},
+{
+  "question": "Pregunta 65: ¿Qué es el aprendizaje transferido (transfer learning) en Machine Learning?",
+  "options": {
+    "A": "El uso de un modelo previamente entrenado en una tarea para acelerar el aprendizaje en una tarea similar.",
+    "B": "El agrupamiento de datos en nuevos clústeres.",
+    "C": "La reducción de dimensionalidad de los datos de entrada.",
+    "D": "El ajuste automático de hiperparámetros."
+  },
+  "correct": "A",
+  "explanation": "El aprendizaje transferido permite aprovechar conocimientos de modelos previos para mejorar el rendimiento en nuevas tareas, especialmente cuando hay pocos datos."
+},
+{
+  "question": "Pregunta 66: ¿Qué es el overfitting (sobreajuste) en Machine Learning?",
+  "options": {
+    "A": "Cuando un modelo se ajusta demasiado a los datos de entrenamiento y no generaliza bien a datos nuevos.",
+    "B": "Cuando un modelo nunca aprende los patrones de los datos.",
+    "C": "El agrupamiento de todos los datos en un solo clúster.",
+    "D": "La reducción excesiva del número de variables."
+  },
+  "correct": "A",
+  "explanation": "El sobreajuste ocurre cuando el modelo memoriza detalles y ruido de los datos de entrenamiento, perdiendo capacidad de generalizar."
+},
+{
+  "question": "Pregunta 67: ¿Qué es el underfitting (subajuste) en Machine Learning?",
+  "options": {
+    "A": "Cuando un modelo es demasiado simple o se entrena muy poco y no logra aprender bien ni siquiera los datos de entrenamiento.",
+    "B": "Cuando el modelo aprende los datos de entrenamiento perfectamente.",
+    "C": "El agrupamiento de datos sin etiquetas.",
+    "D": "La reducción de dimensionalidad excesiva."
+  },
+  "correct": "A",
+  "explanation": "El subajuste ocurre cuando el modelo no logra captar la complejidad de los datos, resultando en bajo rendimiento tanto en entrenamiento como en test."
+},
+{
+  "question": "Pregunta 68: ¿Qué es la regularización en Machine Learning?",
+  "options": {
+    "A": "Una técnica para evitar el sobreajuste penalizando la complejidad del modelo.",
+    "B": "La agrupación de datos en clústeres.",
+    "C": "El ajuste de hiperparámetros.",
+    "D": "La tokenización de texto."
+  },
+  "correct": "A",
+  "explanation": "La regularización añade penalizaciones al modelo para evitar que se ajuste demasiado a los datos de entrenamiento y generalice mejor."
+},
+{
+  "question": "Pregunta 69: ¿Qué es el dropout en redes neuronales?",
+  "options": {
+    "A": "Una técnica de regularización que consiste en desactivar aleatoriamente neuronas durante el entrenamiento.",
+    "B": "La reducción del tamaño del dataset.",
+    "C": "El agrupamiento de datos en clústeres.",
+    "D": "El ajuste de hiperparámetros."
+  },
+  "correct": "A",
+  "explanation": "Dropout ayuda a reducir el sobreajuste haciendo que la red no dependa de un subconjunto fijo de neuronas en cada iteración."
+},
+{
+  "question": "Pregunta 70: ¿Qué es la validación cruzada (cross-validation)?",
+  "options": {
+    "A": "Una técnica de evaluación que divide el conjunto de datos en varios subconjuntos para entrenar y validar el modelo de forma rotativa.",
+    "B": "Un método de reducción de dimensionalidad.",
+    "C": "La regularización de modelos complejos.",
+    "D": "Una función de activación."
+  },
+  "correct": "A",
+  "explanation": "La validación cruzada permite estimar el rendimiento del modelo de manera más fiable y ayuda a seleccionar los mejores hiperparámetros."
+},
+{
+  "question": "Pregunta 71: ¿Qué es un hiperparámetro en Machine Learning?",
+  "options": {
+    "A": "Un parámetro que se establece antes del entrenamiento del modelo y afecta su comportamiento y rendimiento.",
+    "B": "Un valor aprendido automáticamente durante el entrenamiento.",
+    "C": "La salida del modelo.",
+    "D": "El agrupamiento de datos en clústeres."
+  },
+  "correct": "A",
+  "explanation": "Los hiperparámetros se fijan manualmente antes del entrenamiento, como la tasa de aprendizaje o el número de capas ocultas."
+},
+{
+  "question": "Pregunta 72: ¿Qué es la optimización de hiperparámetros?",
+  "options": {
+    "A": "El proceso de buscar los valores óptimos para los hiperparámetros que maximizan el rendimiento del modelo.",
+    "B": "La agrupación de datos en clústeres.",
+    "C": "La tokenización de texto.",
+    "D": "El ajuste automático de pesos en redes neuronales."
+  },
+  "correct": "A",
+  "explanation": "Optimizar hiperparámetros es fundamental para obtener el mejor rendimiento posible de un modelo de Machine Learning."
+},
+{
+  "question": "Pregunta 73: ¿Qué es el aprendizaje semisupervisado?",
+  "options": {
+    "A": "Un tipo de aprendizaje que combina datos etiquetados y no etiquetados durante el entrenamiento.",
+    "B": "Un aprendizaje basado sólo en datos no etiquetados.",
+    "C": "Un método para agrupar datos.",
+    "D": "Una técnica de reducción de dimensionalidad."
+  },
+  "correct": "A",
+  "explanation": "El aprendizaje semisupervisado aprovecha tanto los ejemplos con etiquetas como los que no tienen para mejorar el rendimiento del modelo."
+},
+{
+  "question": "Pregunta 74: ¿Qué es el aprendizaje activo (active learning) en Machine Learning?",
+  "options": {
+    "A": "Una técnica en la que el modelo selecciona los ejemplos más útiles para ser etiquetados por un humano.",
+    "B": "El entrenamiento de redes neuronales profundas.",
+    "C": "El ajuste automático de hiperparámetros.",
+    "D": "La tokenización de texto."
+  },
+  "correct": "A",
+  "explanation": "En el aprendizaje activo, el modelo interactúa con un experto para seleccionar los datos más informativos para etiquetar y así mejorar el entrenamiento."
+},
+{
+  "question": "Pregunta 75: ¿Qué es un modelo preentrenado?",
+  "options": {
+    "A": "Un modelo que ha sido entrenado previamente en un gran conjunto de datos y puede ser reutilizado o afinado para nuevas tareas.",
+    "B": "Un modelo que sólo puede ser usado tal como está.",
+    "C": "Un modelo sin etiquetas.",
+    "D": "Un algoritmo de reducción de dimensionalidad."
+  },
+  "correct": "A",
+  "explanation": "Los modelos preentrenados, como BERT o GPT, ahorran tiempo y recursos porque ya han aprendido representaciones útiles del lenguaje o imágenes."
+},
+{
+  "question": "Pregunta 76: ¿Qué es el fine-tuning (ajuste fino) en un modelo preentrenado?",
+  "options": {
+    "A": "El proceso de continuar el entrenamiento de un modelo preentrenado en un nuevo conjunto de datos específico.",
+    "B": "La reducción de dimensionalidad de las entradas.",
+    "C": "La agrupación de datos sin etiquetas.",
+    "D": "La tokenización de texto."
+  },
+  "correct": "A",
+  "explanation": "El fine-tuning adapta modelos generales a tareas concretas, mejorando su rendimiento con pocos datos adicionales."
+},
+{
+  "question": "Pregunta 77: ¿Qué es un modelo fundacional (foundation model) en IA?",
+  "options": {
+    "A": "Un modelo a gran escala entrenado con grandes cantidades de datos y que puede adaptarse a múltiples tareas.",
+    "B": "Un modelo específico para una única tarea.",
+    "C": "Un algoritmo de clustering tradicional.",
+    "D": "Una técnica de reducción de dimensionalidad."
+  },
+  "correct": "A",
+  "explanation": "Los modelos fundacionales (como GPT-4 o DALL-E) aprenden representaciones generales útiles para resolver muchas tareas diferentes."
+},
+{
+  "question": "Pregunta 78: ¿Qué es el grounding en IA generativa?",
+  "options": {
+    "A": "El proceso de proporcionar contexto o información verificada para que el modelo base sus respuestas en hechos reales.",
+    "B": "La agrupación de datos en clústeres.",
+    "C": "El ajuste de hiperparámetros.",
+    "D": "La reducción de dimensionalidad."
+  },
+  "correct": "A",
+  "explanation": "El grounding mejora la veracidad de los resultados generados por IA, evitando respuestas inventadas ('alucinaciones')."
+},
+{
+  "question": "Pregunta 79: ¿Qué es una alucinación en IA generativa?",
+  "options": {
+    "A": "Cuando un modelo inventa contenido sin base real, generando respuestas falsas o incoherentes.",
+    "B": "Un algoritmo para optimizar modelos.",
+    "C": "La agrupación de datos en clústeres.",
+    "D": "La tokenización de texto."
+  },
+  "correct": "A",
+  "explanation": "Las alucinaciones son respuestas generadas por la IA que parecen plausibles pero no son ciertas ni verificables."
+},
+{
+  "question": "Pregunta 80: ¿Qué es el filtrado de contenido en IA generativa?",
+  "options": {
+    "A": "Un proceso para analizar y bloquear o modificar salidas inapropiadas, ofensivas o peligrosas generadas por el modelo.",
+    "B": "La reducción de dimensionalidad.",
+    "C": "La tokenización de texto.",
+    "D": "El ajuste de hiperparámetros."
+  },
+  "correct": "A",
+  "explanation": "El filtrado de contenido es esencial para la seguridad y la responsabilidad en la IA generativa, especialmente en aplicaciones públicas."
+},
+{
+  "question": "Pregunta 81: ¿Qué es el análisis de sentimiento en procesamiento de lenguaje natural?",
+  "options": {
+    "A": "Una técnica para determinar si el tono de un texto es positivo, negativo o neutral.",
+    "B": "Un algoritmo de agrupamiento de datos.",
+    "C": "Una técnica de reducción de dimensionalidad.",
+    "D": "El ajuste de hiperparámetros."
+  },
+  "correct": "A",
+  "explanation": "El análisis de sentimiento se utiliza en opiniones, reseñas y redes sociales para evaluar la actitud expresada en el texto."
+},
+{
+  "question": "Pregunta 82: ¿Qué es el reconocimiento de entidades nombradas (NER)?",
+  "options": {
+    "A": "Una técnica que identifica y clasifica entidades como personas, organizaciones y lugares en un texto.",
+    "B": "Un método de clustering.",
+    "C": "Una técnica de reducción de dimensionalidad.",
+    "D": "El ajuste de hiperparámetros."
+  },
+  "correct": "A",
+  "explanation": "El NER permite extraer información estructurada de textos no estructurados, útil en análisis documental y chatbots."
+},
+{
+  "question": "Pregunta 83: ¿Qué es la traducción automática neuronal?",
+  "options": {
+    "A": "El uso de redes neuronales profundas para traducir textos entre distintos idiomas.",
+    "B": "La agrupación de datos en clústeres.",
+    "C": "El ajuste automático de hiperparámetros.",
+    "D": "Una técnica de reducción de dimensionalidad."
+  },
+  "correct": "A",
+  "explanation": "La traducción automática neuronal ofrece mejores resultados que los métodos estadísticos tradicionales gracias a la capacidad de las redes neuronales."
+},
+{
+  "question": "Pregunta 84: ¿Qué es la extracción de frases clave (key phrase extraction)?",
+  "options": {
+    "A": "Una técnica que identifica las palabras o expresiones más relevantes en un texto.",
+    "B": "La reducción de dimensionalidad.",
+    "C": "El agrupamiento de datos en clústeres.",
+    "D": "El ajuste de hiperparámetros."
+  },
+  "correct": "A",
+  "explanation": "La extracción de frases clave ayuda a resumir documentos y facilita la búsqueda de información relevante."
+},
+{
+  "question": "Pregunta 85: ¿Qué es la detección de idioma en procesamiento de lenguaje natural?",
+  "options": {
+    "A": "La identificación automática del idioma predominante de un texto.",
+    "B": "El ajuste de hiperparámetros.",
+    "C": "La reducción de dimensionalidad.",
+    "D": "El agrupamiento de datos en clústeres."
+  },
+  "correct": "A",
+  "explanation": "Detectar el idioma es fundamental para sistemas multilingües y para redirigir textos a los modelos adecuados."
+},
+{
+  "question": "Pregunta 86: ¿Qué es el procesamiento de lenguaje natural (NLP)?",
+  "options": {
+    "A": "El campo de la IA enfocado en que las máquinas comprendan, interpreten y generen lenguaje humano.",
+    "B": "La agrupación de datos en clústeres.",
+    "C": "La reducción de dimensionalidad.",
+    "D": "El ajuste de hiperparámetros."
+  },
+  "correct": "A",
+  "explanation": "NLP abarca tareas como traducción, análisis de sentimiento, resumen automático y extracción de información."
+},
+{
+  "question": "Pregunta 87: ¿Qué es la síntesis de voz (text-to-speech) en IA?",
+  "options": {
+    "A": "La conversión automática de texto escrito en voz hablada mediante modelos de IA.",
+    "B": "La agrupación de datos en clústeres.",
+    "C": "El ajuste de hiperparámetros.",
+    "D": "La reducción de dimensionalidad."
+  },
+  "correct": "A",
+  "explanation": "La síntesis de voz permite crear sistemas de asistentes virtuales, accesibilidad y servicios telefónicos automáticos."
+},
+{
+  "question": "Pregunta 88: ¿Qué es el reconocimiento automático de voz (ASR)?",
+  "options": {
+    "A": "La transcripción automática del habla humana en texto mediante modelos de IA.",
+    "B": "El ajuste de hiperparámetros.",
+    "C": "La reducción de dimensionalidad.",
+    "D": "La agrupación de datos en clústeres."
+  },
+  "correct": "A",
+  "explanation": "ASR permite controlar dispositivos por voz, transcribir llamadas y crear asistentes conversacionales inteligentes."
+},
+{
+  "question": "Pregunta 89: ¿Qué es el reconocimiento de imágenes en visión por computador?",
+  "options": {
+    "A": "La capacidad de identificar y clasificar objetos, personas o escenas en imágenes digitales mediante modelos de IA.",
+    "B": "El ajuste de hiperparámetros.",
+    "C": "La reducción de dimensionalidad.",
+    "D": "El agrupamiento de datos en clústeres."
+  },
+  "correct": "A",
+  "explanation": "El reconocimiento de imágenes es clave para aplicaciones como seguridad, automóviles autónomos y diagnóstico médico."
+},
+{
+  "question": "Pregunta 90: ¿Qué es la segmentación de imágenes?",
+  "options": {
+    "A": "El proceso de dividir una imagen en regiones o segmentos significativos para su análisis.",
+    "B": "El ajuste de hiperparámetros.",
+    "C": "La reducción de dimensionalidad.",
+    "D": "El agrupamiento de datos en clústeres."
+  },
+  "correct": "A",
+  "explanation": "La segmentación facilita la detección y análisis de partes específicas de una imagen, como tumores en medicina o objetos en fotos."
+},
+{
+  "question": "Pregunta 91: ¿Qué es la detección de objetos?",
+  "options": {
+    "A": "La identificación y localización de objetos específicos dentro de una imagen o vídeo.",
+    "B": "El ajuste de hiperparámetros.",
+    "C": "La reducción de dimensionalidad.",
+    "D": "El agrupamiento de datos en clústeres."
+  },
+  "correct": "A",
+  "explanation": "La detección de objetos se usa en seguridad, análisis de tráfico y automatización industrial, entre otros."
+},
+{
+  "question": "Pregunta 92: ¿Qué es el reconocimiento facial?",
+  "options": {
+    "A": "La identificación o verificación de personas mediante sus características faciales en imágenes o vídeos.",
+    "B": "El ajuste de hiperparámetros.",
+    "C": "La reducción de dimensionalidad.",
+    "D": "El agrupamiento de datos en clústeres."
+  },
+  "correct": "A",
+  "explanation": "El reconocimiento facial se utiliza en seguridad, control de acceso y organización de fotos personales."
+},
+{
+  "question": "Pregunta 93: ¿Qué es la visión por computador?",
+  "options": {
+    "A": "El campo de la IA que permite a las máquinas analizar y comprender imágenes y vídeos.",
+    "B": "El ajuste de hiperparámetros.",
+    "C": "La reducción de dimensionalidad.",
+    "D": "El agrupamiento de datos en clústeres."
+  },
+  "correct": "A",
+  "explanation": "La visión por computador habilita aplicaciones como reconocimiento de imágenes, segmentación, detección de objetos y más."
+},
+{
+  "question": "Pregunta 94: ¿Qué es la generación de imágenes por IA?",
+  "options": {
+    "A": "La creación automática de imágenes digitales realistas o artísticas mediante modelos de IA generativa.",
+    "B": "El ajuste de hiperparámetros.",
+    "C": "La reducción de dimensionalidad.",
+    "D": "El agrupamiento de datos en clústeres."
+  },
+  "correct": "A",
+  "explanation": "La generación de imágenes permite crear arte digital, ilustraciones, contenido multimedia y prototipos visuales."
+},
+{
+  "question": "Pregunta 95: ¿Qué es el aprendizaje federado?",
+  "options": {
+    "A": "Un enfoque de Machine Learning en el que los modelos se entrenan de forma distribuida en varios dispositivos sin compartir datos sensibles.",
+    "B": "El ajuste de hiperparámetros.",
+    "C": "La reducción de dimensionalidad.",
+    "D": "El agrupamiento de datos en clústeres."
+  },
+  "correct": "A",
+  "explanation": "El aprendizaje federado mejora la privacidad y la seguridad, ya que los datos nunca salen del dispositivo del usuario."
+},
+{
+  "question": "Pregunta 96: ¿Qué es la privacidad diferencial?",
+  "options": {
+    "A": "Una técnica que añade ruido a los datos para proteger la privacidad individual sin sacrificar el análisis global.",
+    "B": "El ajuste de hiperparámetros.",
+    "C": "La reducción de dimensionalidad.",
+    "D": "El agrupamiento de datos en clústeres."
+  },
+  "correct": "A",
+  "explanation": "La privacidad diferencial es esencial para proteger los datos personales al analizar grandes cantidades de información."
+},
+{
+  "question": "Pregunta 97: ¿Qué es la ética en inteligencia artificial?",
+  "options": {
+    "A": "El estudio y la aplicación de principios para asegurar que los sistemas de IA sean justos, transparentes y responsables.",
+    "B": "El ajuste de hiperparámetros.",
+    "C": "La reducción de dimensionalidad.",
+    "D": "El agrupamiento de datos en clústeres."
+  },
+  "correct": "A",
+  "explanation": "La ética en IA busca evitar sesgos, discriminación y malos usos, promoviendo la transparencia y la equidad en los sistemas inteligentes."
+},
+{
+  "question": "Pregunta 98: ¿Qué es la transparencia en los modelos de IA?",
+  "options": {
+    "A": "La capacidad de entender cómo y por qué un modelo toma sus decisiones.",
+    "B": "El ajuste de hiperparámetros.",
+    "C": "La reducción de dimensionalidad.",
+    "D": "El agrupamiento de datos en clústeres."
+  },
+  "correct": "A",
+  "explanation": "La transparencia permite auditar y confiar en los resultados de los sistemas de IA, facilitando su adopción y regulación."
+},
+{
+  "question": "Pregunta 99: ¿Qué es la explicabilidad (explainability) en IA?",
+  "options": {
+    "A": "La capacidad de un sistema de IA para explicar sus predicciones y acciones de forma comprensible para los humanos.",
+    "B": "El ajuste de hiperparámetros.",
+    "C": "La reducción de dimensionalidad.",
+    "D": "El agrupamiento de datos en clústeres."
+  },
+  "correct": "A",
+  "explanation": "La explicabilidad facilita la confianza, la depuración de errores y el cumplimiento normativo en aplicaciones críticas de IA."
+},
+{
+  "question": "Pregunta 100: ¿Qué es la responsabilidad en inteligencia artificial?",
+  "options": {
+    "A": "El principio de asegurar que las personas y organizaciones asuman las consecuencias de las decisiones tomadas por sistemas de IA.",
+    "B": "El ajuste de hiperparámetros.",
+    "C": "La reducción de dimensionalidad.",
+    "D": "El agrupamiento de datos en clústeres."
+  },
+  "correct": "A",
+  "explanation": "La responsabilidad implica atribuir y aceptar la autoría y las consecuencias de las acciones automatizadas por sistemas inteligentes."
+},
+];
+
+    const container = document.getElementById('questions-container');
+
+    function shuffle(arr) {
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+    }
+
+    function shuffleOptions(q) {
+      const letters = ['A', 'B', 'C', 'D', 'E'];
+      const entries = Object.entries(q.options);
+      shuffle(entries);
+      const opts = {};
+      let correct;
+      entries.forEach(([letter, text], idx) => {
+        const l = letters[idx];
+        opts[l] = text;
+        if (letter === q.correct) correct = l;
+      });
+      q.options = opts;
+      q.correct = correct;
+    }
+
+    function renderQuestions() {
+      container.innerHTML = '';
+      questions.forEach((q, index) => {
+        shuffleOptions(q);
+        const div = document.createElement('div');
+        div.className = 'question';
+        const title = document.createElement('h3');
+        title.textContent = `${index + 1}. ${q.question}`;
+        div.appendChild(title);
+
+        const entries = Object.entries(q.options);
+        entries.forEach(([letter, text]) => {
+          const opt = document.createElement('div');
+          opt.className = 'option';
+          opt.setAttribute('data-option', letter);
+          opt.textContent = `${letter}. ${text}`;
+          div.appendChild(opt);
+        });
+
+        div.setAttribute('data-correct', q.correct);
+
+        const explanation = document.createElement('div');
+        explanation.className = 'explanation';
+        explanation.innerHTML = `<strong>Explicación:</strong> ${q.explanation}`;
+        div.appendChild(explanation);
+        container.appendChild(div);
+      });
+    }
+
+    shuffle(questions);
+    renderQuestions();
+
+    document.getElementById('reroll-btn').addEventListener('click', function() {
+      shuffle(questions);
+      renderQuestions();
+    });
+
+    document.addEventListener('click', function(e) {
+      if (e.target.classList.contains('option')) {
+        const option = e.target;
+        const question = option.closest('.question');
+        if (question.getAttribute('data-answered')) return;
+        const correct = question.getAttribute('data-correct');
+        const explanation = question.querySelector('.explanation');
+        const selected = option.getAttribute('data-option');
+        question.setAttribute('data-answered', 'true');
+        if (selected === correct) {
+          option.classList.add('correct');
+        } else {
+          option.classList.add('incorrect');
+          question.querySelector(`.option[data-option="${correct}"]`).classList.add('correct');
+        }
+        explanation.style.display = 'block';
+      }
+    });
+
+    document.getElementById('scroll-top-btn').addEventListener('click', function() {
+      window.scrollTo({top: 0, behavior: 'smooth'});
+    });
+  </script>
+  <script type="text/javascript">
+    function googleTranslateElementInit() {
+      new google.translate.TranslateElement({pageLanguage: 'es', includedLanguages: 'en,es'}, 'google_translate_element');
+    }
+    function setLanguage(lang) {
+      var combo = document.querySelector('select.goog-te-combo');
+      if (combo) {
+        combo.value = lang;
+        combo.dispatchEvent(new Event('change'));
+      }
+    }
+    document.getElementById('btn-en').addEventListener('click', function(){setLanguage('en');});
+    document.getElementById('btn-es').addEventListener('click', function(){setLanguage('es');});
+  </script>
+  <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+</body>
+</html>
